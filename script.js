@@ -396,11 +396,12 @@ document.addEventListener('DOMContentLoaded', () => {
         estoque.forEach(item => {
             const currentQty = pedidoMembro[item.sabor] || 0; 
             
+            // NOVO HTML: Estrutura compacta
             const itemHtml = `
                 <div class="esfirra-item" data-sabor="${item.sabor}" data-preco="${item.preco.toFixed(2)}">
                     <div class="item-info">
                         <h4>${item.sabor}</h4>
-                        <p>R$ ${item.preco.toFixed(2)} / unidade</p>
+                        <p>R$ ${item.preco.toFixed(2)}</p>
                     </div>
                     <div class="quantity-controls">
                         <button class="qty-btn minus-btn"><span class="material-icons">remove</span></button>
@@ -409,6 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
             `;
+            // FIM NOVO HTML
             estoqueList.insertAdjacentHTML('beforeend', itemHtml);
         });
         
