@@ -1,0 +1,441 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons'); 
+
+/* ================================================= */
+/* === 1. VARIÁVEIS DE CORES (TEMA PRETO/CINZA) === */
+/* ================================================= */
+
+:root {
+    /* Cores de Destaque e Ação (Alertas Modernos) */
+    --primary-color: #4d80e4; /* Azul moderno para Ações/Destaque */
+    --secondary-color: #28a745; /* Verde para sucesso */
+    --danger-color: #dc3545; /* Vermelho para Exclusão/Perigo */
+    
+    /* Cores de Fundo e Texto */
+    --background-color: #212529; /* Preto/Cinza Escuro Fundo Principal */
+    --card-bg: #343a40; /* Cinza Escuro para Cartões/Containers */
+    --text-color: #f8f9fa; /* Texto Branco/Claro */
+    --text-secondary: #adb5bd; /* Cinza claro para texto secundário/preços */
+    --border-color: #495057; /* Borda Cinza Escura */
+
+    /* Alturas de Layout */
+    --header-height: 53px; 
+    --nav-height: 60px; 
+}
+
+/* ================================================= */
+/* === 2. RESET E CORREÇÃO DE OVERFLOW === */
+/* ================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    
+    /* Regras de Overflow Zero */
+    height: 100vh;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    padding-bottom: 0; 
+}
+
+/* ================================================= */
+/* === 3. LAYOUT E NAVEGAÇÃO (CENTRALIZADO) === */
+/* ================================================= */
+
+/* Cabeçalho */
+.mobile-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.mobile-header h1 {
+    font-size: 1.2em;
+    margin: 0;
+    font-weight: 600;
+}
+
+/* Conteúdo Principal (ROLÁVEL E CENTRALIZADO) */
+main {
+    flex-grow: 1;
+    max-width: 600px; 
+    width: 100%;
+    padding: 0; 
+    margin: 0 auto;
+    overflow-y: auto; 
+    overflow-x: hidden;
+    height: calc(100vh - var(--header-height) - var(--nav-height));
+}
+
+.page-section {
+    padding: 20px; 
+    margin-top: 20px;
+    margin-bottom: 0; 
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%; 
+}
+
+/* Espaçamento extra no fim do main para o rodapé */
+main::after {
+    content: "";
+    display: block;
+    height: calc(var(--nav-height) + 20px); 
+}
+
+/* Menu de Navegação (Rodapé Fixo e Centralizado) */
+.mobile-nav {
+    position: fixed;
+    bottom: 0;
+    height: var(--nav-height);
+    background-color: var(--card-bg);
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 20;
+    width: 100%;
+    max-width: 600px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.mobile-nav .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-secondary);
+    padding: 5px;
+    transition: color 0.2s;
+}
+
+.mobile-nav .nav-item.active {
+    color: var(--primary-color);
+}
+
+.mobile-nav .nav-item span {
+    font-size: 24px;
+}
+
+.mobile-nav .nav-item small {
+    font-size: 0.75em;
+    font-weight: 500;
+}
+
+/* ================================================= */
+/* === 4. ESTILOS DE COMPONENTES E ALERTAS MODERNOS === */
+/* ================================================= */
+
+/* --- NOVO ESTILO: ALERTA MODAL CENTRALIZADO --- */
+
+/* 🔑 1. Overlay (Fundo Desfocado) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Fundo semi-transparente escuro */
+    
+    /* Aplica o desfoque ao fundo */
+    backdrop-filter: blur(5px); 
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    
+    /* Inicialmente escondido */
+    visibility: hidden; 
+    opacity: 0;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.modal-overlay.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* 🔑 2. Caixa do Alerta (Modal) */
+.modal-alert {
+    background-color: var(--card-bg); /* Usa a cor cinza escuro do cartão */
+    color: var(--text-color);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    width: 90%;
+    max-width: 400px; /* Limita a largura para telas grandes */
+    
+    /* Efeito de pop-up */
+    transform: scale(0.9);
+    transition: transform 0.3s ease-out;
+}
+
+.modal-overlay.active .modal-alert {
+    transform: scale(1);
+}
+
+.modal-alert h3 {
+    font-size: 1.4em;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+}
+
+.modal-alert h3 .material-icons {
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+
+.modal-alert p {
+    margin-bottom: 20px;
+    color: var(--text-secondary);
+}
+
+/* Estilo para Botões dentro do Modal */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end; /* Alinha botões à direita */
+    gap: 10px;
+}
+
+.modal-actions .btn {
+    width: auto; /* Permite que o botão se ajuste ao texto */
+    padding: 10px 15px;
+    font-size: 1em;
+    margin-top: 0;
+}
+
+/* --- Estilos de Componentes (Revertido para BOTOES REDONDOS) --- */
+
+.page-section h2 {
+    font-size: 1.5em;
+    color: var(--text-color); 
+    margin-bottom: 20px;
+}
+
+h3, h4 {
+    color: var(--primary-color); 
+}
+
+/* Formulários e Botões */
+select, input[type="text"], input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: #495057; 
+    color: var(--text-color); 
+    font-size: 1em;
+}
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Cpath%20fill%3D%23f8f9fa%22%20d%3D%22M10%203.5L6%207.5L2%203.5L1%204.5L6%209.5L11%204.5Z%22%2F%3E%3C%2Fsvg%3E"); 
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+.btn {
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 15px;
+}
+
+.btn .material-icons {
+    margin-right: 8px;
+    font-size: 1.2em;
+}
+
+.primary-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.primary-btn:hover:not(:disabled) {
+    background-color: #3b6bcc; 
+}
+
+.secondary-btn {
+    background-color: var(--secondary-color);
+    color: white;
+}
+.secondary-btn:hover:not(:disabled) {
+    background-color: #218c39; 
+}
+
+.btn:disabled {
+    background-color: var(--border-color); 
+    color: var(--text-secondary); 
+    cursor: not-allowed;
+}
+
+/* --- Lista de Esfirras (Layout Horizontal com BOTOES REDONDOS) --- */
+.estoque-list {
+    display: flex;
+    flex-direction: column; 
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.esfirra-item {
+    display: flex; 
+    align-items: center; /* Alinha horizontalmente o conteúdo do item */
+    justify-content: space-between; /* Espaça o info e os controles */
+    
+    padding: 15px;
+    background-color: #495057; 
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.item-info {
+    flex-grow: 1; /* Permite que o info ocupe o espaço restante */
+    margin-right: 15px;
+}
+
+.item-info h4 {
+    font-size: 1.1em;
+    margin-bottom: 3px;
+    color: var(--text-color);
+}
+
+.item-info p {
+    font-size: 0.9em;
+    color: var(--text-secondary);
+}
+
+/* Estilo para os controles de quantidade (BOTOES LADO A LADO) */
+.quantity-controls {
+    display: flex;
+    align-items: center; 
+    flex-shrink: 0; /* Impede que os controles encolham */
+}
+
+/* Botoes Redondos (+) e (-) */
+.qty-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 1.2em;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.qty-btn:hover {
+    background-color: #3b6bcc; 
+}
+
+.qty-input {
+    width: 40px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+    margin: 0 5px;
+    padding: 5px 0;
+    border-radius: 4px;
+    font-weight: 600;
+    pointer-events: none; 
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+/* FIM DOS ESTILOS DE QUANTIDADE REVERTIDOS */
+
+/* Estilos Adicionais (Clientes e Resumo) */
+.clientes-list-summary { list-style: none; padding: 0; }
+.clientes-list-summary li { 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    padding: 10px 0; 
+    border-bottom: 1px dashed var(--border-color);
+    color: var(--text-color); 
+}
+.clientes-list-summary li strong { color: var(--text-color); } 
+.clientes-list-summary li small { color: var(--text-secondary); } 
+
+
+.btn-edit, .btn-delete { 
+    background: none; 
+    border: none; 
+    cursor: pointer; 
+    padding: 0 5px; 
+    transition: color 0.2s;
+}
+.btn-edit { color: var(--secondary-color); } 
+.btn-delete { color: var(--danger-color); } 
+
+/* Estilos Tabela de Preços */
+#estoque-editor table { width: 100%; border-collapse: collapse; }
+#estoque-editor th, #estoque-editor td { padding: 10px 5px; border-bottom: 1px solid var(--border-color); text-align: left; color: var(--text-color); }
+#estoque-editor th { background-color: #495057; } 
+#estoque-editor input { width: 100%; padding: 5px; border: 1px solid var(--border-color); border-radius: 4px; background-color: var(--card-bg); color: var(--text-color); }
+#estoque-editor td:nth-child(2) input { text-align: right; }
+.btn-remove-sabor { background: none; border: none; color: var(--danger-color); cursor: pointer; } 
+
+/* Estilos Tabela de Resumo */
+.resumo-familia { margin-bottom: 30px; }
+.resumo-familia h3 { color: var(--secondary-color); margin-top: 15px; margin-bottom: 10px; } 
+.resumo-familia table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+.resumo-familia th, .resumo-familia td { padding: 8px; border: 1px solid var(--border-color); color: var(--text-color); } 
+.resumo-familia thead { background-color: #495057; } 
+.resumo-familia tfoot td { font-weight: 700; background-color: var(--primary-color); color: white; } 
+.detalhe-cliente { margin: 10px 0; padding: 10px; background-color: #495057; border-left: 3px solid var(--primary-color); } 
+.detalhe-cliente ul { list-style: disc; padding-left: 20px; color: var(--text-secondary); } 
+
+/* ESTILO PARA BOTÕES DE MEMBROS */
+.membros-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.membro-btn {
+    padding: 15px 10px;
+    border: 1px solid var(--border-color); 
+    border-radius: 8px;
+    background-color: var(--card-bg); 
+    color: var(--text-color); 
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.1s, border-color 0.1s;
+    text-align: center;
+    font-size: 1em;
+}
+
+.membro-btn:hover {
+    background-color: #495057; 
+    border-color: var(--primary-color); 
+}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido de Esfirras Multi-Cliente</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+
+    <main id="app-content">
+        
+        <section id="clientes-mobile" class="page-section active">
+            <h2>Selecione a Família e o Membro</h2>
+            
+            <div class="form-group">
+                
+                <select id="select-familia">
+                    <option value="">Escolha a Família</option>
+                    <option value="Matheus">Família Matheus</option>
+                    <option value="Kelvin">Família Kelvin</option>
+                    <option value="Santos">Família Santos</option>
+                    <option value="Moisés">Família Moisés</option>
+                </select>
+            </div>
+
+            <div id="membros-container" class="membros-grid">
+                <p style="color: #999; text-align: center;">Selecione uma família acima.</p>
+            </div>
+            <hr style="margin: 20px 0;">
+
+            <h3>Membros no Pedido Atual:</h3>
+            <ul id="clientes-no-pedido" class="clientes-list-summary">
+                <li style="color: #999;">Nenhum cliente adicionado ainda.</li>
+            </ul>
+        </section>
+
+        <section id="estoque-mobile" class="page-section" style="display: none;">
+            <h2>Editar Tabela de Preços 📝</h2>
+            <div id="estoque-editor">
+            </div>
+            <button class="btn secondary-btn" id="salvarPrecosBtn">Salvar Preços</button>
+            <button class="btn primary-btn" id="addSaborBtn">Adicionar Novo Sabor</button>
+        </section>
+
+        <section id="pedido-mobile" class="page-section" style="display: none;">
+            <h2 id="pedido-cliente-title">Selecione o Cliente Primeiro</h2>
+            
+            <div id="estoque-list" class="estoque-list">
+            </div>
+            
+            <button class="btn primary-btn" id="salvarPedidoBtn" disabled>
+                <span class="material-icons">check_circle</span> Salvar e Finalizar Cliente
+            </button>
+        </section>
+
+        <section id="resumo-mobile" class="page-section" style="display: none;">
+            <h2>Resumo Total por Família</h2>
+            <div id="resumo-total-container">
+            </div>
+
+            <button class="btn primary-btn" id="gerarPdfBtn" disabled>Gerar PDF do Pedido Completo</button>
+        </section>
+
+    </main>
+
+    <nav class="mobile-nav">
+        <a href="#" class="nav-item active" data-page="clientes-mobile">
+            <span class="material-icons">group_add</span>
+            <small>Clientes</small>
+        </a>
+        <a href="#" class="nav-item" data-page="estoque-mobile">
+            <span class="material-icons">edit_note</span>
+            <small>Preços</small>
+        </a>
+        <a href="#" class="nav-item" data-page="pedido-mobile">
+            <span class="material-icons">fastfood</span>
+            <small>Pedir</small>
+        </a>
+        <a href="#" class="nav-item" data-page="resumo-mobile">
+            <span class="material-icons">receipt</span>
+            <small>Resumo</small>
+        </a>
+    </nav>
+
+    <div id="meuAlerta" class="modal-overlay">
+        <div class="modal-alert">
+            <h3 id="modal-title">
+                <span id="modal-icon" class="material-icons">info</span> 
+                Mensagem do Sistema
+            </h3>
+            <p id="modal-message">O JavaScript deve preencher esta mensagem. Lembre-se de definir a função 'fecharAlerta()' no seu script.js</p>
+            <div id="modal-actions" class="modal-actions">
+                <button class="btn secondary-btn" onclick="fecharAlerta()">OK</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
