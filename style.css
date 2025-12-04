@@ -293,7 +293,7 @@ select {
     /* Layout de lista vertical (um item abaixo do outro) */
     display: flex; 
     flex-direction: column; /* Força a lista vertical */
-    gap: 10px; Espaçamento entre os itens
+     gap: 10px; /*Espaçamento entre os itens */
     margin-bottom: 20px;
 }
 
@@ -315,13 +315,13 @@ select {
 
 .item-info {
     width: 100%; 
-    margin-right: 0;
+    margin: 0px;
     margin-bottom: 0px; 
 }
 
 .item-info h4 {
     font-size: 0.95em; 
-    /* margin-bottom: 2px; */
+    margin-bottom: 1px;
     color: var(--text-color);
     font-weight: 600;
 }
