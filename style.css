@@ -293,7 +293,7 @@ select {
     /* Layout de lista vertical (um item abaixo do outro) */
     display: flex; 
     flex-direction: column; /* Força a lista vertical */
-    gap: 10px; /* Espaçamento entre os itens */
+    gap: 10px; Espaçamento entre os itens
     margin-bottom: 20px;
 }
 
@@ -307,7 +307,7 @@ select {
     /* Garante a largura total para o layout de lista */
     width: 100%; 
     
-    padding: 15px 10px; 
+    /* padding: 15px 10px;  */
     background-color: #495057; 
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -316,12 +316,12 @@ select {
 .item-info {
     width: 100%; 
     margin-right: 0;
-    margin-bottom: 10px; 
+    margin-bottom: 0px; 
 }
 
 .item-info h4 {
     font-size: 0.95em; 
-    margin-bottom: 2px;
+    /* margin-bottom: 2px; */
     color: var(--text-color);
     font-weight: 600;
 }
@@ -342,8 +342,8 @@ select {
     background-color: var(--primary-color);
     color: white;
     border: none;
-    width: 35px;
-    height: 35px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     font-size: 1.2em;
     line-height: 1;
