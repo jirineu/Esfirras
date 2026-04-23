@@ -282,7 +282,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         saveState(); 
-        renderMembrosNoPedido(); 
+        renderMembrosNoPedido();
+         excluirMembroPlanilha(familia, membro); // Sincroniza exclusão com a planilha
         mostrarAlerta("Pedido Limpo!", `O pedido de ${membro} foi <b>limpo</b> com sucesso.`, "check_circle");
     }
     
@@ -339,6 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function removeSabor(index) {
         estoque.splice(index, 1);
         renderEstoqueEditor();
+        excluirSaborPlanilha(index); // Sincroniza exclusão com a planilha
         mostrarAlerta("Sucesso", "Sabor removido da lista (Temporariamente).", "check_circle");
     }
     
@@ -378,6 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (valid) {
             estoque = newEstoque; 
             mostrarAlerta("Sucesso!", "Tabela de preços atualizada com sucesso (Apenas para esta sessão).", "check_circle");
+            salvarSaborPlanilha(newEstoque);
         } else {
             mostrarAlerta("Erro de Preenchimento", "Por favor, preencha todos os campos <b>Sabor</b> e <b>Preço</b> corretamente.", "warning");
         }
@@ -465,6 +468,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         pedidoGeral[familia][membro].itens = novoPedidoItens; 
         saveState(); 
+        salvarPedidoMembroPlanilha(familia, membro, novoPedidoItens);
         
         // CORREÇÃO AQUI: Usando <b> ao invés de **
         const mensagemSucesso = totalEsfirrasSalvas > 0 
@@ -772,4 +776,88 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === 9. Inicialização ===
     goToPage('clientes-mobile');
+
+
+    // === CONFIGURAÇÃO DO GOOGLE APPS SCRIPT ===
+// Substitua pela URL que você receberá ao publicar o Web App no Apps Script
+const URL_WEB_APP = "https://script.google.com/macros/s/AKfycbzsaqHBbYHqH95l2DDBJDjDvHwS_3ZWLSwYAbJjAqFiyLxdhpDYbLGfOzJHfCUuaho-bA/exec";
+
+/**
+ * FUNÇÃO UNIFICADA DE COMUNICAÇÃO
+ * Centraliza todas as chamadas de POST (salvar/excluir) para a planilha.
+ */
+async function comunicarComPlanilha(acao, dados) {
+    try {
+        // Mostra um aviso visual discreto ou log se quiser
+        console.log(`Sincronizando: ${acao}...`);
+
+        const payload = {
+            metodo: acao,
+            payload: dados
+        };
+
+        // Usamos 'no-cors' para evitar bloqueios do Google Apps Script em navegadores
+        await fetch(URL_WEB_APP, {
+            method: 'POST',
+            mode: 'no-cors', 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        return true;
+    } catch (error) {
+        console.error("Erro na sincronização:", error);
+        return false;
+    }
+}
+function excluirMembroPlanilha(familia, membro) {
+    // 1. Ação Local
+    if (pedidoGeral[familia] && pedidoGeral[familia][membro]) {
+        pedidoGeral[familia][membro].itens = {};
+        saveState();
+    }
+
+    // 2. Ação na Planilha
+    comunicarComPlanilha('excluir_membro', { familia, membro });
+
+    renderMembrosNoPedido();
+    mostrarAlerta("Removido", `O pedido de <b>${membro}</b> foi excluído da planilha.`, "delete_sweep");
+}
+function excluirSaborPlanilha(index) {
+    const saborExcluido = estoque[index].sabor;
+
+    // 1. Ação Local
+    estoque.splice(index, 1);
+    renderEstoqueEditor();
+
+    // 2. Ação na Planilha
+    comunicarComPlanilha('excluir_sabor', { sabor: saborExcluido });
+
+    mostrarAlerta("Sabor Removido", `O sabor <b>${saborExcluido}</b> foi removido do banco de dados.`, "remove_shopping_cart");
+}
+function salvarPedidoMembroPlanilha(familia, membro, itens) {
+    // 1. Ação Local
+    if (!pedidoGeral[familia]) pedidoGeral[familia] = {};
+    pedidoGeral[familia][membro] = { itens: itens };
+    saveState();
+
+    // 2. Ação na Planilha
+    comunicarComPlanilha('salvar_pedido', {
+        familia: familia,
+        membro: membro,
+        itens: itens, // Envia o objeto de sabores e quantidades
+        data: new Date().toLocaleString('pt-BR')
+    });
+}
+function salvarSaborPlanilha(novoEstoque) {
+    // 1. Ação Local
+    estoque = novoEstoque;
+    // (Opcional) Salvar estoque no localStorage também
+
+    // 2. Ação na Planilha
+    // Envia a lista completa de preços para atualizar a aba de preços
+    comunicarComPlanilha('salvar_estoque_completo', { itens: novoEstoque });
+
+    mostrarAlerta("Preços Salvos", "A tabela de preços foi sincronizada com a planilha.", "cloud_done");
+}
 });
